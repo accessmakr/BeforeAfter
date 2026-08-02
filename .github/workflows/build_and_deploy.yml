@@ -21,11 +21,7 @@ jobs:
       - run: rm -f android/app/build.gradle.kts
       - run: flutter pub get
       - run: flutter build appbundle --release --split-debug-info=symbols --obfuscate
-      - name: Build universal APK from AAB
-        run: |
-          wget -q https://github.com/google/bundletool/releases/download/1.17.0/bundletool-all-1.17.0.jar -O bundletool.jar
-          java -jar bundletool.jar build-apks --bundle=build/app/outputs/bundle/release/app-release.aab --output=app.apks --mode=universal
-          unzip -p app.apks universal.apk > beforeafter.apk
+      - run: flutter build apk --release --split-debug-info=symbols --obfuscate
       - name: Upload AAB (for Play Store)
         uses: actions/upload-artifact@v4
         with:
@@ -36,7 +32,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: beforeafter-apk
-          path: beforeafter.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30
 
   build-ios-ipa:
