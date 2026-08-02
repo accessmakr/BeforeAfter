@@ -21,6 +21,7 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+      - run: flutter create . --platforms=android --org=com.beforeafter --project-name=beforeafter
       - run: flutter pub get
       - run: flutter build appbundle --release
       - uses: actions/upload-artifact@v4
@@ -37,8 +38,7 @@ jobs:
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
-      - name: Generate iOS project files
-        run: flutter create . --platforms=ios --org=com.beforeafter
+      - run: flutter create . --platforms=ios --org=com.beforeafter --project-name=beforeafter
       - run: flutter pub get
       - run: flutter build ios --release --no-codesign
       - run: |
