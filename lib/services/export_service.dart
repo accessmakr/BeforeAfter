@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:ui' as ui;
@@ -10,7 +11,6 @@ import '../models/comparison_model.dart';
 /// Generates shareable images from comparison views.
 class ExportService {
   /// Captures a widget as a PNG image.
-  /// [boundary] is obtained via GlobalKey + RepaintBoundary.
   static Future<Uint8List?> captureWidget(RenderRepaintBoundary boundary) async {
     try {
       final ui.Image image = await boundary.toImage(pixelRatio: 3.0);
@@ -19,6 +19,21 @@ class ExportService {
     } catch (e) {
       debugPrint('ExportService.captureWidget error: $e');
       return null;
+    }
+  }
+
+  /// Saves image bytes directly to device gallery.
+  static Future<bool> saveToGallery(Uint8List imageBytes) async {
+    try {
+      final result = await ImageGallerySaver.saveImage(
+        imageBytes,
+        name: 'beforeafter_${DateTime.now().millisecondsSinceEpoch}',
+        isReturnImagePathOfIOS: true,
+      );
+      return result['isSuccess'] == true;
+    } catch (e) {
+      debugPrint('ExportService.saveToGallery error: $e');
+      return false;
     }
   }
 
