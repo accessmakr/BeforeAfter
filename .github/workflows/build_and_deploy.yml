@@ -37,6 +37,8 @@ jobs:
         with:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
+      - name: Generate iOS project files
+        run: flutter create . --platforms=ios --org=com.beforeafter
       - run: flutter pub get
       - run: flutter build ios --release --no-codesign
       - run: |
