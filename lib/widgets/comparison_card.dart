@@ -16,7 +16,7 @@ class ComparisonCard extends StatelessWidget {
     required this.comparison,
     required this.onTap,
     required this.onDelete,
-    required onShare,
+    required this.onShare,
   });
 
   @override
@@ -63,7 +63,7 @@ class ComparisonCard extends StatelessWidget {
                         children: [
                           _IconButton(
                             icon: Icons.share,
-                            onTap: () {}, // onShare handled at screen level
+                            onTap: onShare,
                           ),
                           const SizedBox(width: AppSpacing.sm),
                           _IconButton(
