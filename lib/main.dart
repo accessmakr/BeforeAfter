@@ -27,7 +27,7 @@ class BeforeAfterApp extends StatefulWidget {
 }
 
 class _BeforeAfterAppState extends State<BeforeAfterApp> {
-  final ComparisonProvider _comparisonProvider = ComparisonProvider(isPro: () => false);
+  late final ComparisonProvider _comparisonProvider;
   final SubscriptionProvider _subscriptionProvider = SubscriptionProvider();
 
   @override
