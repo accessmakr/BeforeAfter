@@ -1,0 +1,13 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    prefer_const_constructors: true
+    prefer_const_literals_to_create_immutables: true
+    prefer_final_fields: true
+    avoid_print: true
+    prefer_single_quotes: true
+    avoid_unnecessary_containers: true
+    avoid_redundant_argument_values: true
+    always_specify_types: false
+    prefer_typing_uninitialized_variables: true

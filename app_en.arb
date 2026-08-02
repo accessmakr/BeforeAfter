@@ -1,0 +1,41 @@
+{
+  "@@locale": "en",
+  "appTitle": "BeforeAfter",
+  "@appTitle": {"description": "App name displayed in app bar and launcher"},
+
+  "today": "Today",
+  "yesterday": "Yesterday",
+
+  "errorGeneric": "Something went wrong",
+  "errorRestart": "Please restart the app. If this persists, contact support.",
+  "retry": "Retry",
+
+  "newComparison": "New Comparison",
+  "createComparison": "Create Comparison",
+  "selectBefore": "Tap to select BEFORE photo",
+  "selectAfter": "Tap to select AFTER photo",
+  "imageTooLarge": "Image too large. Max 100MB.",
+  "loadImageError": "Failed to load image.",
+
+  "before": "BEFORE",
+  "after": "AFTER",
+
+  "exportShare": "Export & Share",
+
+  "unlockPro": "Unlock Pro",
+  "proDescription": "Remove ads and create unlimited comparisons.",
+  "featureRemoveAds": "Remove all ads",
+  "featureUnlimited": "Unlimited comparisons",
+  "featureHighRes": "High-resolution export",
+  "featureBackup": "Cloud backup & restore",
+  "alreadyPro": "You're already Pro!",
+  "restorePurchases": "Restore Purchases",
+
+  "searchComparisons": "Search comparisons...",
+  "selectTwoPhotos": "Select two photos and compare",
+  "noComparisons": "No comparisons yet",
+  "noComparisonsHint": "Tap \"Create Comparison\" to start",
+
+  "comparison": "Comparison",
+  "untitled": "Untitled"
+}
