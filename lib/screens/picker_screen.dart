@@ -28,8 +28,8 @@ class _PickerScreenState extends State<PickerScreen> {
       final XFile? picked = await _picker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 90,
-        maxWidth: AppLimits.maxImageDimension,
-        maxHeight: AppLimits.maxImageDimension,
+        maxWidth: AppLimits.maxImageDimension.toDouble(),
+        maxHeight: AppLimits.maxImageDimension.toDouble(),
       );
       if (picked != null) {
         final file = File(picked.path);
@@ -56,8 +56,8 @@ class _PickerScreenState extends State<PickerScreen> {
       final XFile? picked = await _picker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 90,
-        maxWidth: AppLimits.maxImageDimension,
-        maxHeight: AppLimits.maxImageDimension,
+        maxWidth: AppLimits.maxImageDimension.toDouble(),
+        maxHeight: AppLimits.maxImageDimension.toDouble(),
       );
       if (picked != null) {
         final file = File(picked.path);
