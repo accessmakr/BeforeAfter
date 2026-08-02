@@ -20,7 +20,7 @@ jobs:
       - run: flutter create . --platforms=android --org=com.beforeafter --project-name=beforeafter
       - run: rm -f android/app/build.gradle.kts
       - run: flutter pub get
-      - run: flutter build appbundle --release
+      - run: flutter build appbundle --release --split-debug-info=symbols --obfuscate
       - uses: actions/upload-artifact@v4
         with:
           name: beforeafter-android-release
