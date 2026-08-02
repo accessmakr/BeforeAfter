@@ -9,7 +9,7 @@ env:
   FLUTTER_VERSION: "3.24.0"
 
 jobs:
-  # ─── WEB BUILD → Cloudflare Pages ───
+  # ─── WEB BUILD → Cloudflare Worker ───
   build-and-deploy-web:
     runs-on: ubuntu-latest
     steps:
@@ -28,12 +28,12 @@ jobs:
       - name: Build web release
         run: flutter build web --release --base-href /
 
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy to Cloudflare Worker
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy build/web --project-name=beforeafter --branch=main
+          command: deploy
 
   # ─── ANDROID .aab ───
   build-android-aab:
