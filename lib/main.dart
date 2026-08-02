@@ -132,7 +132,7 @@ class _BeforeAfterAppState extends State<BeforeAfterApp> {
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.lg)),
         color: AppColors.bgSecondary,
@@ -176,7 +176,7 @@ class _BeforeAfterAppState extends State<BeforeAfterApp> {
         ),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.lg)),
         color: AppColors.bgSecondaryDark,
