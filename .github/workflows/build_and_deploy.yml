@@ -1,9 +1,7 @@
 name: Build BeforeAfter (.aab + .apk + .ipa)
 
 on:
-  push:
-    branches: [main, master]
-  workflow_dispatch:
+  workflow_dispatch:  # Manual only. Tap "Run workflow" when YOU are ready.
 
 jobs:
   build-android:
@@ -22,13 +20,13 @@ jobs:
       - run: flutter pub get
       - run: flutter build appbundle --release --split-debug-info=symbols --obfuscate
       - run: flutter build apk --release --split-debug-info=symbols --obfuscate
-      - name: Upload AAB (for Play Store)
+      - name: Upload AAB
         uses: actions/upload-artifact@v4
         with:
           name: beforeafter-aab
           path: build/app/outputs/bundle/release/*.aab
           retention-days: 30
-      - name: Upload APK (for phone testing)
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: beforeafter-apk
