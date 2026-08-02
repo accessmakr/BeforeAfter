@@ -11,7 +11,6 @@ import '../utils/date_formatter.dart';
 import '../widgets/edit_title_dialog.dart';
 import '../widgets/slider_widget.dart';
 
-/// Full-screen slider view with share, export, zoom, and fullscreen controls.
 class SliderScreen extends StatefulWidget {
   final ComparisonModel comparison;
   final ComparisonProvider? comparisonProvider;
@@ -121,7 +120,7 @@ class _SliderScreenState extends State<SliderScreen> {
       final image = await ExportService.captureWidget(boundary);
       if (image != null) {
         final success = await ExportService.saveToGallery(image);
-        _showSuccess(success ? 'Saved to gallery' : 'Failed to save');
+        _showSuccess(success ? 'Select your gallery app to save' : 'Failed to save');
       }
     } catch (e) {
       _showError('Save failed.');
@@ -284,7 +283,7 @@ class _SliderScreenState extends State<SliderScreen> {
                               style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                             ),
                             style: ElevatedButton.styleFrom(
-                                                            backgroundColor: AppColors.accent,
+                              backgroundColor: AppColors.accent,
                               foregroundColor: AppColors.textInverse,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(AppRadii.md),
@@ -298,7 +297,6 @@ class _SliderScreenState extends State<SliderScreen> {
                 ),
             ],
           ),
-          // Tap-to-exit fullscreen zone
           if (_isFullscreen)
             Positioned(
               top: 0,
