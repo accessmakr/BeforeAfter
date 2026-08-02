@@ -1,74 +1,27 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import '../utils/constants.dart';
 
-/// AdMob initialization and banner ad management.
-/// All methods are safe to call even if AdMob is not initialized.
+/// AdMob stub. Ads temporarily disabled to fix build.
+/// Re-enable by adding google_mobile_ads to pubspec.yaml.
 class AdMobService {
   static bool _initialized = false;
-  static BannerAd? _bannerAd;
 
-  /// Initializes the AdMob SDK. Call once in main().
   static Future<void> initialize() async {
     if (_initialized) return;
-    try {
-      await MobileAds.instance.initialize();
-      _initialized = true;
-      debugPrint('AdMob initialized');
-    } catch (e) {
-      debugPrint('AdMob initialization failed: $e');
-    }
+    _initialized = true;
+    debugPrint('AdMob disabled in this build');
   }
 
-  /// Returns the correct banner ad unit ID for the platform.
-  static String get bannerAdUnitId {
-    if (Platform.isIOS) return AdUnitIds.iosBanner;
-    return AdUnitIds.androidBanner;
-  }
+  static String get bannerAdUnitId => '';
 
-  /// Loads a new banner ad. Dispose old one first.
-  static BannerAd? loadBannerAd({
+  static dynamic loadBannerAd({
     required VoidCallback onLoaded,
     required VoidCallback onFailed,
   }) {
-    if (!_initialized) {
-      onFailed();
-      return null;
-    }
-
-    _bannerAd?.dispose();
-    _bannerAd = null;
-
-    final ad = BannerAd(
-      adUnitId: bannerAdUnitId,
-      size: AdSize.banner,
-      request: const AdRequest(),
-      listener: BannerAdListener(
-        onAdLoaded: (_) {
-          debugPrint('Banner ad loaded');
-          onLoaded();
-        },
-        onAdFailedToLoad: (ad, error) {
-          debugPrint('Banner ad failed: ${error.message}');
-          ad.dispose();
-          _bannerAd = null;
-          onFailed();
-        },
-      ),
-    );
-
-    ad.load();
-    _bannerAd = ad;
-    return ad;
+    onFailed();
+    return null;
   }
 
-  /// Returns the current banner ad (may be null if not loaded).
-  static BannerAd? get currentBanner => _bannerAd;
+  static dynamic get currentBanner => null;
 
-  /// Disposes the banner ad to free memory.
-  static void dispose() {
-    _bannerAd?.dispose();
-    _bannerAd = null;
-  }
+  static void dispose() {}
 }
