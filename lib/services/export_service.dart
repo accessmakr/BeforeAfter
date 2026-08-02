@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'dart:ui' as ui;
@@ -22,15 +21,17 @@ class ExportService {
     }
   }
 
-  /// Saves image bytes directly to device gallery.
+  /// Saves image by sharing it — user picks "Photos" or "Gallery" from share sheet.
   static Future<bool> saveToGallery(Uint8List imageBytes) async {
     try {
-      final result = await ImageGallerySaver.saveImage(
-        imageBytes,
-        name: 'beforeafter_${DateTime.now().millisecondsSinceEpoch}',
-        isReturnImagePathOfIOS: true,
+      final tempDir = await getTemporaryDirectory();
+      final file = File('${tempDir.path}/beforeafter_${DateTime.now().millisecondsSinceEpoch}.png');
+      await file.writeAsBytes(imageBytes);
+      await Share.shareXFiles(
+        [XFile(file.path)],
+        text: 'Before & After',
       );
-      return result['isSuccess'] == true;
+      return true;
     } catch (e) {
       debugPrint('ExportService.saveToGallery error: $e');
       return false;
