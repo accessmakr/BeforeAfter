@@ -3,14 +3,16 @@ import '../models/comparison_model.dart';
 import '../providers/comparison_provider.dart';
 import '../providers/subscription_provider.dart';
 import '../utils/constants.dart';
-import '../widgets/comparison_card.dart';
 import '../widgets/banner_ad_widget.dart';
+import '../widgets/bottom_nav_bar.dart';
+import '../widgets/comparison_card.dart';
 import '../widgets/pro_badge.dart';
 import 'picker_screen.dart';
+import 'settings_screen.dart';
 import 'slider_screen.dart';
 import 'paywall_screen.dart';
 
-/// Dashboard: comparison grid, create button, search, ads.
+/// Dashboard: comparison grid, search, bottom nav.
 class HomeScreen extends StatefulWidget {
   final ComparisonProvider comparisonProvider;
   final SubscriptionProvider subscriptionProvider;
@@ -28,6 +30,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -62,9 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (result != null && mounted) {
       final success = await widget.comparisonProvider.add(result);
-      if (!success && mounted) {
-        _showPaywall();
-      }
+      if (!success && mounted) _showPaywall();
     }
   }
 
@@ -81,7 +82,10 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => SliderScreen(comparison: comparison),
+        builder: (_) => SliderScreen(
+          comparison: comparison,
+          comparisonProvider: widget.comparisonProvider,
+        ),
       ),
     );
   }
@@ -90,10 +94,41 @@ class _HomeScreenState extends State<HomeScreen> {
     await widget.comparisonProvider.delete(id);
   }
 
+  Future<void> _editTitle(ComparisonModel comparison) async {
+    final newTitle = await showDialog<String>(
+      context: context,
+      builder: (_) => _EditTitleSheet(initialTitle: comparison.title),
+    );
+    if (newTitle != null && newTitle.isNotEmpty) {
+      final updated = comparison.copyWith(title: newTitle);
+      await widget.comparisonProvider.update(updated);
+    }
+  }
+
   List<ComparisonModel> get _filteredComparisons {
     final list = widget.comparisonProvider.value;
     if (_searchQuery.isEmpty) return list;
     return list.where((c) => c.title.toLowerCase().contains(_searchQuery.toLowerCase())).toList();
+  }
+
+  void _onNavTapped(int index) {
+    if (index == 1) {
+      _createComparison();
+      return;
+    }
+    if (index == 2) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => SettingsScreen(
+            subscriptionProvider: widget.subscriptionProvider,
+            comparisonProvider: widget.comparisonProvider,
+          ),
+        ),
+      );
+      return;
+    }
+    setState(() => _selectedIndex = index);
   }
 
   @override
@@ -253,18 +288,78 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () => _openComparison(comparison),
                         onDelete: () => _deleteComparison(comparison.id),
                         onShare: () {},
+                        onEditTitle: () => _editTitle(comparison),
                       );
                     },
                     childCount: comparisons.length,
                   ),
                 ),
               ),
-            // Bottom padding for ad banner
             const SliverToBoxAdapter(child: SizedBox(height: AppSpacing.xl)),
           ],
         ),
       ),
-      bottomNavigationBar: !isPro ? const BannerAdWidget() : null,
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onNavTapped,
+        isPro: isPro,
+      ),
+    );
+  }
+}
+
+class _EditTitleSheet extends StatefulWidget {
+  final String initialTitle;
+  const _EditTitleSheet({required this.initialTitle});
+
+  @override
+  State<_EditTitleSheet> createState() => _EditTitleSheetState();
+}
+
+class _EditTitleSheetState extends State<_EditTitleSheet> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.initialTitle);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = MediaQuery.platformBrightnessOf(context) == Brightness.dark;
+    return AlertDialog(
+      backgroundColor: isDark ? AppColors.bgSecondaryDark : AppColors.bgSecondary,
+      title: Text('Edit Title', style: TextStyle(color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary)),
+      content: TextField(
+        controller: _controller,
+        autofocus: true,
+        decoration: InputDecoration(
+          hintText: 'Comparison name',
+          filled: true,
+          fillColor: isDark ? AppColors.bgTertiaryDark : AppColors.bgTertiary,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppRadii.md),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () => Navigator.pop(context, _controller.text.trim()),
+          child: const Text('Save'),
+        ),
+      ],
     );
   }
 }
