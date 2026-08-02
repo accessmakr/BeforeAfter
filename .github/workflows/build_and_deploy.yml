@@ -1,4 +1,4 @@
-name: Build BeforeAfter (.aab + .ipa)
+name: Build BeforeAfter (.aab + .apk + .ipa)
 
 on:
   push:
@@ -21,10 +21,17 @@ jobs:
       - run: rm -f android/app/build.gradle.kts
       - run: flutter pub get
       - run: flutter build appbundle --release --split-debug-info=symbols --obfuscate
+      - name: Build universal APK from AAB
+        run: |
+          wget -q https://github.com/google/bundletool/releases/download/1.17.0/bundletool-all-1.17.0.jar -O bundletool.jar
+          java -jar bundletool.jar build-apks --bundle=build/app/outputs/bundle/release/app-release.aab --output=app.apks --mode=universal
+          unzip -p app.apks universal.apk > build/app/outputs/bundle/release/beforeafter-universal.apk
       - uses: actions/upload-artifact@v4
         with:
           name: beforeafter-android-release
-          path: build/app/outputs/bundle/release/*.aab
+          path: |
+            build/app/outputs/bundle/release/*.aab
+            build/app/outputs/bundle/release/*.apk
           retention-days: 30
 
   build-ios-ipa:
