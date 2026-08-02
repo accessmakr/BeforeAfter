@@ -17,6 +17,8 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+      - name: Clean conflicting files
+        run: rm -f android/build.gradle android/settings.gradle android/gradle.properties
       - run: flutter create . --platforms=android --org=com.beforeafter --project-name=beforeafter
       - run: flutter pub get
       - run: flutter build appbundle --release
@@ -33,6 +35,8 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
+      - name: Clean conflicting files
+        run: rm -f ios/Runner/Info.plist
       - run: flutter create . --platforms=ios --org=com.beforeafter --project-name=beforeafter
       - run: flutter pub get
       - run: flutter build ios --release --no-codesign
