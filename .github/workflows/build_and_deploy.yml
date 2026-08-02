@@ -17,9 +17,8 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-      - name: Clean conflicting files
-        run: rm -f android/build.gradle android/settings.gradle android/gradle.properties
       - run: flutter create . --platforms=android --org=com.beforeafter --project-name=beforeafter
+      - run: rm -f android/app/build.gradle.kts
       - run: flutter pub get
       - run: flutter build appbundle --release
       - uses: actions/upload-artifact@v4
@@ -30,13 +29,13 @@ jobs:
 
   build-ios-ipa:
     runs-on: macos-latest
+    env:
+      FLUTTER_SWIFT_PACKAGE_MANAGER: false
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-      - name: Clean conflicting files
-        run: rm -f ios/Runner/Info.plist
       - run: flutter create . --platforms=ios --org=com.beforeafter --project-name=beforeafter
       - run: flutter pub get
       - run: flutter build ios --release --no-codesign
