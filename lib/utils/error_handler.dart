@@ -42,19 +42,6 @@ class _ErrorWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 15, color: Color(0xFF3C3C43)),
               ),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () {
-                  // Attempt to recover by rebuilding.
-                  WidgetsBinding.instance.attachToBuildTree(
-                    RenderObjectToWidgetAdapter(
-                      container: WidgetsBinding.instance.renderView,
-                      child: const SizedBox.shrink(),
-                    ),
-                  );
-                },
-                child: const Text('Retry'),
-              ),
             ],
           ),
         ),
